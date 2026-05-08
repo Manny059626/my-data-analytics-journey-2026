@@ -36,6 +36,7 @@ By completing this program, I am developing the ability to:
 
 ## 🚀 Goal
 Build strong data analytics skills and develop real-world AI projects.
+
 ---
 
 ## 📌 Current Focus
