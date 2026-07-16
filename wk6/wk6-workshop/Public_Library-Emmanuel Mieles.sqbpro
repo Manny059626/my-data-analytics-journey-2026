@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="Public_Library.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1047"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="loans" custom_title="0" dock_id="1" table="4,5:mainloans"/><dock_state state="000000ff00000000fd00000001000000020000054a0000024ffc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000054a0000012300ffffff000002690000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="authors" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="63"/><column index="2" value="87"/><column index="3" value="119"/><column index="4" value="68"/><column index="5" value="119"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="books" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="53"/><column index="2" value="300"/><column index="3" value="63"/><column index="4" value="58"/><column index="5" value="111"/><column index="6" value="103"/><column index="7" value="88"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="branches" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="64"/><column index="2" value="167"/><column index="3" value="127"/><column index="4" value="95"/><column index="5" value="71"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="genres" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="58"/><column index="2" value="127"/><column index="3" value="300"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="loans" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="49"/><column index="2" value="53"/><column index="3" value="63"/><column index="4" value="64"/><column index="5" value="93"/><column index="6" value="87"/><column index="7" value="87"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="patrons" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="63"/><column index="2" value="79"/><column index="3" value="79"/><column index="4" value="175"/><column index="5" value="127"/><column index="6" value="95"/><column index="7" value="108"/><column index="8" value="64"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">-- Display all branches
+SELECT *
+FROM branches;
+
+-- Display all patrons
+SELECT *
+FROM patrons;
+
+-- Display all genres
+SELECT *
+FROM genres;
+
+-- Display all authors
+SELECT *
+FROM authors;
+
+-- Display all books
+SELECT *
+FROM books;
+
+-- Display all loans
+SELECT *
+FROM loans;
+
+-- Retrieve the titles and publication years
+SELECT
+    title,
+    publication_year
+
+-- From the books table
+FROM books
+
+-- Only books published after 2000
+WHERE publication_year &gt; 2000
+
+-- Order by newest publication year first
+ORDER BY publication_year DESC;
+
+SELECT
+    title,
+    publication_year
+FROM books
+WHERE publication_year &gt; 2000
+ORDER BY publication_year DESC;
+
+-- Retrieve the title, copies owned, and genre
+SELECT
+    title,
+    copies_owned,
+    genre_id
+
+-- From the books table
+FROM books
+
+-- Books with more than 5 copies
+WHERE copies_owned &gt; 5
+
+-- Only Fiction books
+AND genre_id = 1;
+
+SELECT
+    title,
+    copies_owned,
+    genre_id
+FROM books
+WHERE copies_owned &gt; 5
+AND genre_id = 1;
+
+-- Retrieve book titles
+SELECT
+    title
+
+-- From the books table
+FROM books
+
+-- Titles containing the word History
+WHERE title LIKE '%History%';
+
+SELECT
+    title
+FROM books
+WHERE title LIKE '%History%';
+
+-- Retrieve loan and patron information
+SELECT
+    l.loan_id,
+    l.checkout_date,
+    l.due_date,
+    p.first_name,
+    p.last_name,
+    p.email
+
+-- From the loans table
+FROM loans AS l
+
+-- Join the patrons table
+INNER JOIN patrons AS p
+ON l.patron_id = p.patron_id
+
+-- Only loans made in January 2023
+WHERE l.checkout_date &gt;= '2023-01-01'
+AND l.checkout_date &lt; '2023-02-01';
+
+SELECT
+    l.loan_id,
+    l.checkout_date,
+    l.due_date,
+    p.first_name,
+    p.last_name,
+    p.email
+FROM loans AS l
+INNER JOIN patrons AS p
+ON l.patron_id = p.patron_id
+WHERE l.checkout_date &gt;= '2023-01-01'
+AND l.checkout_date &lt; '2023-02-01';
+
+-- Retrieve book, author, genre, and loan details
+SELECT
+    b.title,
+    a.first_name || ' ' || a.last_name AS author_name,
+    g.genre_name,
+    l.checkout_date,
+    l.due_date
+
+-- Start with the loans table
+FROM loans AS l
+
+-- Connect each loan to its book
+INNER JOIN books AS b
+ON l.book_id = b.book_id
+
+-- Connect each book to its author
+INNER JOIN authors AS a
+ON b.author_id = a.author_id
+
+-- Connect each book to its genre
+INNER JOIN genres AS g
+ON b.genre_id = g.genre_id;
+
+SELECT
+    b.title,
+    a.first_name || ' ' || a.last_name AS author_name,
+    g.genre_name,
+    l.checkout_date,
+    l.due_date
+FROM loans AS l
+INNER JOIN books AS b
+ON l.book_id = b.book_id
+INNER JOIN authors AS a
+ON b.author_id = a.author_id
+INNER JOIN genres AS g
+ON b.genre_id = g.genre_id;
+
+-- Retrieve two patron names and their shared city
+SELECT
+    p1.first_name || ' ' || p1.last_name AS patron_1,
+    p2.first_name || ' ' || p2.last_name AS patron_2,
+    p1.city
+
+-- Use the patrons table as the first patron
+FROM patrons AS p1
+
+-- Join the patrons table to itself
+INNER JOIN patrons AS p2
+ON p1.city = p2.city
+
+-- Prevent patrons from matching themselves
+-- and prevent duplicate reversed pairs
+AND p1.patron_id &lt; p2.patron_id;
+
+SELECT
+    p1.first_name || ' ' || p1.last_name AS patron_1,
+    p2.first_name || ' ' || p2.last_name AS patron_2,
+    p1.city
+FROM patrons AS p1
+INNER JOIN patrons AS p2
+ON p1.city = p2.city
+AND p1.patron_id &lt; p2.patron_id;
+
+SELECT
+    p1.first_name || ' ' || p1.last_name AS patron_1,
+    p2.first_name || ' ' || p2.last_name AS patron_2,
+    p1.city
+FROM patrons AS p1
+INNER JOIN patrons AS p2
+ON p1.city = p2.city
+AND p1.patron_id &lt; p2.patron_id;
+
+-- Retrieve the fiction book, patron, and branch
+SELECT
+    b.title,
+    p.first_name || ' ' || p.last_name AS patron_name,
+    br.branch_name
+
+-- Start with the loans table
+FROM loans AS l
+
+-- Connect each loan to a book
+INNER JOIN books AS b
+ON l.book_id = b.book_id
+
+-- Connect each loan to a patron
+INNER JOIN patrons AS p
+ON l.patron_id = p.patron_id
+
+-- Connect each loan to a branch
+INNER JOIN branches AS br
+ON l.branch_id = br.branch_id
+
+-- Only fiction books
+WHERE b.genre_id = 1;
+
+SELECT
+    b.title,
+    p.first_name || ' ' || p.last_name AS patron_name,
+    br.branch_name
+FROM loans AS l
+INNER JOIN books AS b
+ON l.book_id = b.book_id
+INNER JOIN patrons AS p
+ON l.patron_id = p.patron_id
+INNER JOIN branches AS br
+ON l.branch_id = br.branch_id
+WHERE b.genre_id = 1;
+
+-- Retrieve each genre and count its books
+SELECT
+    g.genre_name,
+    COUNT(b.book_id) AS number_of_books
+
+-- Start with the genres table
+FROM genres AS g
+
+-- Connect genres to books
+LEFT JOIN books AS b
+ON g.genre_id = b.genre_id
+
+-- Group the results by genre
+GROUP BY
+    g.genre_id,
+    g.genre_name;
+	
+SELECT
+    g.genre_name,
+    COUNT(b.book_id) AS number_of_books
+FROM genres AS g
+LEFT JOIN books AS b
+ON g.genre_id = b.genre_id
+GROUP BY
+    g.genre_id,
+    g.genre_name;	
+
+-- Retrieve each branch and loan duration statistics
+SELECT
+    br.branch_name,
+
+    -- Average number of loan days
+    ROUND(
+        AVG(
+            julianday(l.return_date) - julianday(l.checkout_date)
+        ),
+        2
+    ) AS average_loan_days,
+
+    -- Minimum number of loan days
+    MIN(
+        julianday(l.return_date) - julianday(l.checkout_date)
+    ) AS minimum_loan_days,
+
+    -- Maximum number of loan days
+    MAX(
+        julianday(l.return_date) - julianday(l.checkout_date)
+    ) AS maximum_loan_days
+
+-- Start with the branches table
+FROM branches AS br
+
+-- Connect branches to loans
+INNER JOIN loans AS l
+ON br.branch_id = l.branch_id
+
+-- Include only returned books
+WHERE l.return_date IS NOT NULL
+
+-- Group results by branch
+GROUP BY
+    br.branch_id,
+    br.branch_name;
+
+SELECT
+    br.branch_name,
+    ROUND(
+        AVG(
+            julianday(l.return_date) - julianday(l.checkout_date)
+        ),
+        2
+    ) AS average_loan_days,
+    MIN(
+        julianday(l.return_date) - julianday(l.checkout_date)
+    ) AS minimum_loan_days,
+    MAX(
+        julianday(l.return_date) - julianday(l.checkout_date)
+    ) AS maximum_loan_days
+FROM branches AS br
+INNER JOIN loans AS l
+ON br.branch_id = l.branch_id
+WHERE l.return_date IS NOT NULL
+GROUP BY
+    br.branch_id,
+    br.branch_name;
+
+-- Retrieve patron details and count overdue books
+SELECT
+    p.first_name,
+    p.last_name,
+    p.email,
+    COUNT(l.loan_id) AS overdue_book_count
+
+-- Start with the patrons table
+FROM patrons AS p
+
+-- Connect patrons to loans
+INNER JOIN loans AS l
+ON p.patron_id = l.patron_id
+
+-- Only overdue loans
+WHERE DATE(l.due_date) &lt; DATE('now')
+AND l.return_date IS NULL
+
+-- Group results by patron
+GROUP BY
+    p.patron_id,
+    p.first_name,
+    p.last_name,
+    p.email;
+
+SELECT
+    p.first_name,
+    p.last_name,
+    p.email,
+    COUNT(l.loan_id) AS overdue_book_count
+FROM patrons AS p
+INNER JOIN loans AS l
+ON p.patron_id = l.patron_id
+WHERE DATE(l.due_date) &lt; DATE('now')
+AND l.return_date IS NULL
+GROUP BY
+    p.patron_id,
+    p.first_name,
+    p.last_name,
+    p.email;
+
+-- Retrieve year and month from checkout dates
+SELECT
+    strftime('%Y', checkout_date) AS loan_year,
+    strftime('%m', checkout_date) AS loan_month,
+
+    -- Count all loans
+    COUNT(loan_id) AS number_of_loans,
+
+    -- Count unique patrons
+    COUNT(DISTINCT patron_id) AS unique_patrons
+
+-- From the loans table
+FROM loans
+
+-- Group by year and month
+GROUP BY
+    strftime('%Y', checkout_date),
+    strftime('%m', checkout_date)
+
+-- Order by year and month
+ORDER BY
+    loan_year,
+    loan_month;
+
+SELECT
+    strftime('%Y', checkout_date) AS loan_year,
+    strftime('%m', checkout_date) AS loan_month,
+    COUNT(loan_id) AS number_of_loans,
+    COUNT(DISTINCT patron_id) AS unique_patrons
+FROM loans
+GROUP BY
+    strftime('%Y', checkout_date),
+    strftime('%m', checkout_date)
+ORDER BY
+    loan_year,
+    loan_month;
+	
+-- Retrieve table names, column names, data types,
+-- and primary-key information
+SELECT
+    m.name AS table_name,
+    p.name AS column_name,
+    p.type AS data_type,
+    CASE
+        WHEN p.pk &gt; 0 THEN 'YES'
+        ELSE 'NO'
+    END AS is_primary_key
+
+-- Read the database schema
+FROM sqlite_master AS m
+
+-- Read the columns for each table
+JOIN pragma_table_info(m.name) AS p
+
+-- Only include user-created tables
+WHERE m.type = 'table'
+AND m.name NOT LIKE 'sqlite_%'
+
+-- Sort by table and column order
+ORDER BY
+    m.name,
+    p.cid;
+	
+SELECT
+    m.name AS table_name,
+    p.name AS column_name,
+    p.type AS data_type,
+    CASE
+        WHEN p.pk &gt; 0 THEN 'YES'
+        ELSE 'NO'
+    END AS is_primary_key
+FROM sqlite_master AS m
+JOIN pragma_table_info(m.name) AS p
+WHERE m.type = 'table'
+AND m.name NOT LIKE 'sqlite_%'
+ORDER BY
+    m.name,
+    p.cid;
+
+CREATE TABLE branch_inventory (
+    inventory_id INTEGER PRIMARY KEY,
+    branch_id INTEGER,
+    book_id INTEGER,
+    copies_owned INTEGER,
+    copies_available INTEGER,
+    shelf_location TEXT,
+    FOREIGN KEY (branch_id)
+        REFERENCES branches(branch_id),
+    FOREIGN KEY (book_id)
+        REFERENCES books(book_id)
+);
+
+/* =========================================================
+DISCUSSION QUESTION 1
+
+Question:
+In our library database, we track which branch a book was
+borrowed from, but books can exist at multiple branches.
+How would you modify the schema to track the actual inventory
+at each branch?
+
+Answer:
+I would create a new table called branch_inventory. This table
+would connect books and branches together and keep track of
+how many copies each branch owns and how many are currently
+available. This would make it much easier to see which branch
+has a book in stock.
+========================================================= */
+
+CREATE TABLE branch_inventory (
+    inventory_id INTEGER PRIMARY KEY,
+    branch_id INTEGER,
+    book_id INTEGER,
+    copies_owned INTEGER,
+    copies_available INTEGER,
+    shelf_location TEXT,
+    FOREIGN KEY (branch_id) REFERENCES branches(branch_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+
+/* =========================================================
+DISCUSSION QUESTION 2
+
+Question:
+Based on the provided data model, what business questions
+could library administrators answer using SQL queries that
+we have not covered?
+
+Answer:
+The library could use SQL to answer many other questions.
+For example:
+
+- Which books are checked out the most?
+- Which books have never been borrowed?
+- Which genres are the most popular?
+- Which branch has the most activity?
+- Which patrons borrow the most books?
+- Which books should the library buy more copies of?
+========================================================= */
+
+SELECT
+    b.title,
+    COUNT(l.loan_id) AS times_borrowed
+FROM books b
+LEFT JOIN loans l
+ON b.book_id = l.book_id
+GROUP BY b.book_id, b.title
+ORDER BY times_borrowed DESC;
+
+/* =========================================================
+DISCUSSION QUESTION 3
+
+Question:
+How would you extend this schema to track reserved books,
+late fees, or library programs?
+
+Answer:
+I would create separate tables for reservations, late fees,
+and library programs. Keeping this information in separate
+tables keeps the database organized and makes it easier to
+manage different types of information.
+========================================================= */
+
+CREATE TABLE reservations (
+    reservation_id INTEGER PRIMARY KEY,
+    patron_id INTEGER,
+    book_id INTEGER,
+    reservation_date DATE,
+    status TEXT
+);
+
+CREATE TABLE late_fees (
+    fee_id INTEGER PRIMARY KEY,
+    patron_id INTEGER,
+    loan_id INTEGER,
+    amount DECIMAL(10,2),
+    paid TEXT
+);
+
+CREATE TABLE library_programs (
+    program_id INTEGER PRIMARY KEY,
+    program_name TEXT,
+    program_date DATE
+);
+
+/* =========================================================
+DISCUSSION QUESTION 4
+
+Question:
+For Tasks 1–3, how could you combine them into one query that
+finds recent history books with multiple copies?
+
+Answer:
+I can combine all of the conditions into one WHERE clause.
+The query looks for books published after 2000, with more
+than five copies, in the Fiction genre, and with &quot;History&quot;
+in the title.
+========================================================= */
+
+SELECT
+    title,
+    publication_year,
+    copies_owned,
+    genre_id
+FROM books
+WHERE publication_year &gt; 2000
+AND copies_owned &gt; 5
+AND genre_id = 1
+AND title LIKE '%History%'
+ORDER BY publication_year DESC;
+
+/* =========================================================
+DISCUSSION QUESTION 5
+
+Question:
+What performance considerations should be kept in mind when
+running complex joins and aggregations on large datasets?
+
+Answer:
+For large databases, performance is important. I would create
+indexes on columns that are used often, only select the
+columns I actually need instead of using SELECT *, and make
+sure the tables are joined correctly. These steps help the
+queries run faster.
+========================================================= */
+
+CREATE INDEX idx_books_author
+ON books(author_id);
+
+CREATE INDEX idx_books_genre
+ON books(genre_id);
+
+CREATE INDEX idx_loans_book
+ON loans(book_id);
+
+CREATE INDEX idx_loans_patron
+ON loans(patron_id);
+
+CREATE INDEX idx_loans_branch
+ON loans(branch_id);</sql><current_tab id="0"/></tab_sql></sqlb_project>
